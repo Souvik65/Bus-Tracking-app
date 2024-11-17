@@ -25,6 +25,10 @@ io.on("connection", function (socket) {
         }
     });
 
+    socket.on("request-locations", function () {
+        socket.emit("receive-location", userLocations); // Send current locations to the requesting client
+    });
+
     socket.on("location-shared", function (busNumber) {
         io.emit("location-shared", busNumber); // Notify all users
     });
