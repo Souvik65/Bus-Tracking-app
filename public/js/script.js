@@ -35,7 +35,7 @@ function initMap() {
     locateMeBtn.onAdd = function () {
         const button = L.DomUtil.create('button', 'locate-me-btn');
         button.innerHTML = 'Locate Me';
-        button.onclick = debounce(locateUser , 300); // Debounced function call
+        button.onclick = debounce(locateUser  , 300); // Debounced function call
         return button;
     };
     locateMeBtn.addTo(map);
@@ -55,9 +55,9 @@ function debounce(func, wait) {
 }
 
 // Locate user and center map
-function locateUser () {
+function locateUser  () {
     if (isLocating) return; // Prevent multiple requests
-    isLocating = true; // Set flag ```javascript
+    isLocating = true; // Set flag 
     if (navigator.geolocation) {
         showLoadingIndicator(true); // Show loading indicator
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -235,7 +235,7 @@ document.getElementById('shareLocationBtn').onclick = function () {
 
 // Track bus as a passenger
 document.getElementById('trackBusBtn').onclick = function () {
-    const selectedBus = document.getElementById('busSelect').value;
+    const selectedBus = document .getElementById('busSelect').value;
     if (selectedBus) {
         for (const id in markers) {
             if (markers[id].getPopup().getContent() === selectedBus) {
@@ -248,9 +248,12 @@ document.getElementById('trackBusBtn').onclick = function () {
     }
 };
 
+// Automatically update bus locations every second
+setInterval(() => {
+    socket.emit("request-locations"); // Request updated locations from the server
+}, 1000);
+
 // Responsive design adjustments
 window.addEventListener('resize', function() {
     map.invalidateSize(); // Adjust the map size on window resize
 });
-
-
