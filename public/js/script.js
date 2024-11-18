@@ -4,11 +4,12 @@ let markers = {};
 let userType = '';
 let busNumber = '';
 let isLocating = false; // To prevent multiple geolocation requests
+let locationUpdateInterval = null; // For throttling location updates
 
 // Request notification permission
 if (Notification.permission !== "granted") {
     Notification.requestPermission();
-}
+} 
 
 // Initialize the map when the page loads
 window.onload = function () {
@@ -111,7 +112,7 @@ function addMarker(id, lat, lng, busNumber) {
         markers[id].setLatLng([lat, lng]); // Update position
         markers[id].getPopup().setContent(busNumber).update(); // Update popup with bus number
     } else {
-        markers[id] = L.marker([lat, lng], { icon: busIcon }) // Use custom bus icon
+        markers [id] = L.marker([lat, lng], { icon: busIcon }) // Use custom bus icon
             .addTo(map)
             .bindPopup(busNumber) // Add popup with bus number
             .openPopup();
@@ -120,9 +121,9 @@ function addMarker(id, lat, lng, busNumber) {
 
 // Update markers based on received locations
 function updateMarkers(locations) {
-    // Clear the bus selection dropdown
-    const busSelect = document.getElementById('busSelect');
-    busSelect.innerHTML = '<option value="">Select a Bus</option>'; // Reset options
+ // Clear the bus selection dropdown
+    // const busSelect = document.getElementById('busSelect');
+    // busSelect.innerHTML = '<option value="">Select a Bus</option>'; // Reset options
 
     for (const id in locations) {
         const { latitude, longitude, busNumber } = locations[id];
@@ -221,6 +222,24 @@ document.getElementById('shareLocationBtn').onclick = function () {
             socket.emit("location-shared", busNumber); // Notify all users
             isLocating = false; // Reset flag
             showLoadingIndicator(false); // Hide loading indicator
+
+            // Start location update interval
+            locationUpdateInterval = setInterval(() => {
+                const updatedData = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    busNumber: busNumber
+                };
+                socket.emit("send-location", updatedData);
+            }, 2000); // Update every 2 seconds
+
+            // Stop sharing location when button is pressed
+            document.getElementById('stopSharingBtn').onclick = function () {
+                clearInterval(locationUpdateInterval); // Stop the interval
+                socket.emit("stop-location-sharing", busNumber); // Notify server to stop sharing
+                isLocating = false; // Reset flag
+                showNotification(`Stopped sharing location for bus ${busNumber}.`);
+            };
         }, function (error) {
             console.error("Geolocation error:", error);
             showNotification("Unable to retrieve your location. Please check your device settings.");
@@ -235,7 +254,7 @@ document.getElementById('shareLocationBtn').onclick = function () {
 
 // Track bus as a passenger
 document.getElementById('trackBusBtn').onclick = function () {
-    const selectedBus = document .getElementById('busSelect').value;
+    const selectedBus = document.getElementById('busSelect').value;
     if (selectedBus) {
         for (const id in markers) {
             if (markers[id].getPopup().getContent() === selectedBus) {
@@ -248,12 +267,19 @@ document.getElementById('trackBusBtn').onclick = function () {
     }
 };
 
-// Automatically update bus locations every second
-setInterval(() => {
-    socket.emit("request-locations"); // Request updated locations from the server
-}, 1000);
-
 // Responsive design adjustments
 window.addEventListener('resize', function() {
     map.invalidateSize(); // Adjust the map size on window resize
+});
+
+// Error handling for socket events
+socket.on("connect_error", function () {
+    showNotification("Connection to the server failed. Please try again later.");
+});
+
+socket.on("disconnect", function () {
+    showNotification("Disconnected from the server. Attempting to reconnect...");
+    setTimeout(() => {
+        socket.connect();
+    }, 5000); // Retry connection after 5 seconds
 });
