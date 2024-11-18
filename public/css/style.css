@@ -128,7 +128,7 @@ h1 {
     border: none;
     color: white;
     cursor: pointer;
-    margin-left: 10px;
+ margin-left: 10px;
 }
 
 @media (max-width: 600px) {
@@ -148,7 +148,7 @@ h1 {
 
 @media (min-width: 1024px) {
     #myMap {
-        height : 600px; /* Adjust height for desktops */
+        height: 600px; /* Adjust height for desktops */
     }
 }
 
