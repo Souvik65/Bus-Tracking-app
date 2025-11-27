@@ -7,35 +7,55 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
-
-
-
-
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
-let userLocations = {}; 
+let userLocations = {};
+let activeBuses = {};  // Track active bus numbers
 
 io.on("connection", function (socket) {
-    console.log(`User  connected: ${socket.id}`);
-    socket.emit("initial-locations", userLocations); // Send all current locations to new connection
+    console.log(`User connected: ${socket.id}`);
+    socket.emit("initial-locations", userLocations);
 
     socket.on("send-location", function (data) {
-        if (data.latitude && data.longitude) {
-            userLocations[socket.id] = { id: socket.id, ...data };
-            io.emit("receive-location", userLocations);
-        } else {
-            console.error("Invalid location data received:", data);
+        if (!data.latitude || !data.longitude || isNaN(data.latitude)) {
+            socket.emit("error", "Invalid location data.");
+            return;
         }
+        if (activeBuses[data.busNumber]) {
+            socket.emit("error", "Bus already active.");
+            return;
+        }
+        activeBuses[data.busNumber] = socket.id;
+        userLocations[socket.id] = { id: socket.id, ...data };
+        io.emit("receive-location", userLocations);
+    });
+
+    socket.on("request-locations", function () {
+        socket.emit("receive-location", userLocations);
+    });
+
+    socket.on("request-all-buses", function () {
+        socket.emit("all-buses", Object.values(userLocations));
+    });
+
+    socket.on("stop-location-sharing", function (busNumber) {
+        delete userLocations[socket.id];
+        delete activeBuses[busNumber];
+        io.emit("receive-location", userLocations);
+        io.emit("bus-stopped", busNumber);  // Notify clients to update dropdown
     });
 
     socket.on("location-shared", function (busNumber) {
-        io.emit("location-shared", busNumber); // Notify all users
+        io.emit("location-shared", busNumber);
     });
 
     socket.on("disconnect", function () {
-        console.log(`User  disconnected: ${socket.id}`);
-        delete userLocations[socket.id]; 
+        console.log(`User disconnected: ${socket.id}`);
+        for (const bus in activeBuses) {
+            if (activeBuses[bus] === socket.id) delete activeBuses[bus];
+        }
+        delete userLocations[socket.id];
         io.emit("user-disconnected", socket.id);
     });
 });

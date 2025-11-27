@@ -1,28 +1,28 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #e9ecef; /* Light gray background */
+    background-color: #e9ecef;
     margin: 0;
     padding: 0;
 }
 
-.container { 
+.container {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #ffffff; /* White background for the container */
+    background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
 }
 
 .container:hover {
-    transform: translateY(-5px); /* Slight lift effect on hover */
+    transform: translateY(-5px);
 }
 
 h1 {
     text-align: center;
-    color: #343a40; /* Dark gray for the heading */
-    font-size: 2.5em; /* Larger font size for the heading */
+    color: #343a40;
+    font-size: 2.5em;
     margin-bottom: 20px;
 }
 
@@ -33,20 +33,20 @@ h1 {
 }
 
 .user-btn {
-    background-color: #007bff; /* Blue button */
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 12px 25px;
     border-radius: 5px;
     cursor: pointer;
     margin: 0 10px;
-    font-size: 1.1em; /* Slightly larger font size */
+    font-size: 1.1em;
     transition: background-color 0.3s, transform 0.3s;
 }
 
 .user-btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: scale(1.05); /* Slightly enlarge on hover */
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 .input-container {
@@ -57,31 +57,31 @@ h1 {
     width: calc(100% - 22px);
     padding: 12px;
     margin: 5px 0;
-    border: 1px solid #ced4da; /* Light gray border */
+    border: 1px solid #ced4da;
     border-radius: 5px;
     box-sizing: border-box;
-    font-size: 1em; /* Consistent font size */
+    font-size: 1em;
 }
 
 .input-field:focus {
-    border-color: #007bff; /* Blue border on focus */
-    outline: none; /* Remove default outline */
+    border-color: #007bff;
+    outline: none;
 }
 
 .action-btn {
-    background-color: #28a745; /* Green button */
+    background-color: #28a745;
     color: white;
     border: none;
     padding: 12px 25px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1.1em; /* Slightly larger font size */
+    font-size: 1.1em;
     transition: background-color 0.3s, transform 0.3s;
 }
 
 .action-btn:hover {
-    background-color: #218838; /* Darker green on hover */
-    transform: scale(1.05); /* Slightly enlarge on hover */
+    background-color: #218838;
+    transform: scale(1.05);
 }
 
 .map-container {
@@ -93,18 +93,18 @@ h1 {
 }
 
 .locate-me-btn {
-    background-color: #2417b8; /* Teal button */
+    background-color: #1735b8;
     color: white;
     border: none;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
     margin: 5px;
-    font-size: 1em; /* Consistent font size */
+    font-size: 1em;
 }
 
 .locate-me-btn:hover {
-    background-color: #138496; /* Darker teal on hover */
+    background-color: #138496;
 }
 
 .notification-area {
@@ -115,7 +115,7 @@ h1 {
 }
 
 .notification {
-    background-color: #007bff; /* Blue background for notifications */
+    background-color: #007bff;
     color: white;
     padding: 10px;
     border-radius: 5px;
@@ -131,39 +131,6 @@ h1 {
     margin-left: 10px;
 }
 
-@media (max-width: 600px) {
-    .user-btn,
-    .action-btn,
-    .locate-me-btn {
-        padding: 8px 15px; /* Smaller padding for mobile */
-        font-size: 0.9em; /* Slightly smaller font size */
-    }
-}
-
-@media (min-width: 768px) {
-    #myMap {
-        height: 500px; /* Adjust height for tablets */
-    }
-}
-
-@media (min-width: 1024px) {
-    #myMap {
-        height : 600px; /* Adjust height for desktops */
-    }
-}
-
-@media (min-width: 1280px) {
-    #myMap {
-        height: 700px; /* Adjust height for large desktops */
-    }
-}
-
-@media (min-width: 1440px) {
-    #myMap {
-        height: 800px; /* Adjust height for very large screens */
-    }
-}
-
 #loadingIndicator {
     position: fixed;
     top: 50%;
@@ -172,6 +139,37 @@ h1 {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 5px;
-    display: none; /* Hidden by default */
-    z-index: 1001; /* Above other elements */
+    display: none;
+    z-index: 1001;
+}
+
+@media (max-width: 600px) {
+    .user-btn, .action-btn, .locate-me-btn {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+}
+
+@media (min-width: 768px) {
+    #myMap {
+        height: 500px;
+    }
+}
+
+@media (min-width: 1024px) {
+    #myMap {
+        height: 600px;
+    }
+}
+
+@media (min-width: 1280px) {
+    #myMap {
+        height: 700px;
+    }
+}
+
+@media (min-width: 1440px) {
+    #myMap {
+        height: 800px;
+    }
 }

@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-movingmarker@0.0.6/dist/MovingMarker.js"></script>
 </head>
-<body> 
-    <div class="container"> 
+<body>
+    <div class="container">
         <h1>WELCOME to BUS RADAR</h1>
         <div class="user-type-selection">
             <button id="driverBtn" class="user-btn">Driver</button>
@@ -18,6 +19,7 @@
         <div id="driverInput" class="input-container" style="display: none;">
             <input type="text" id="busNumber" placeholder="Enter Bus Number" class="input-field" />
             <button id="shareLocationBtn" class="action-btn">Share My Location</button>
+            <button id="stopSharingBtn" class="action-btn">Stop Sharing Location</button>
         </div>
         <div id="passengerInput" class="input-container" style="display: none;">
             <input type="text" id="passengerName" placeholder="Enter Your Name" class="input-field" />
@@ -27,8 +29,8 @@
             <button id="trackBusBtn" class="action-btn">Track Bus</button>
         </div>
         <div id="myMap" class="map-container"></div>
-        <div id="notificationArea" class="notification-area"></div> <!-- Notification area -->
-        <div id="loadingIndicator" style="display: none;">Loading...</div> <!-- Loading indicator -->
+        <div id="notificationArea" class="notification-area"></div>
+        <div id="loadingIndicator" style="display: none;">Loading...</div>
     </div>
 
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
